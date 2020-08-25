@@ -23,9 +23,7 @@ module.exports = {
             .reply(`Alright, I will post your message in channel ${destination} in ${delay} minute/s`)
             .then(msg => msg.delete({ timeout: 5000 })
             .catch(console.error));
-
-        // delay = delay * 60000;
-        delay = delay * 10000;
+        delay = delay * 60000;
 
         //remove delay int from args[0]
         args.shift();
