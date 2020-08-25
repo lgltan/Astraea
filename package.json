@@ -1,0 +1,18 @@
+{
+  "name": "astraea",
+  "version": "1.0.0",
+  "description": "A bot for the Astral Library Discord server",
+  "main": "index.js",
+  "dependencies": {
+    "discord.js": "^12.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "author": "TechTrad",
+  "license": "ISC"
+}
