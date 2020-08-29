@@ -3,29 +3,43 @@ module.exports = {
     description: 'Post a message at a later time',
     args: true,
     extraperms: true,
-    usage: '<delay in mins> <#channel> <message>',
+    usage: '<delay in mins> <delay in hours> <delay in days> <#channel> <message>',
     execute(message, args, client) {
         if (message.member.roles.cache.some(role => role.name === 'Admin' || role.name === 'Library Technician')) {
             //delete the command message
         message.channel.bulkDelete(1, true).catch(err => {
             console.error(err);
         });
-
         //declare variables for init msg
-        let delayStr = args[0];
-        let destination = args[1];
+        let delayStrMin = args[0];
+        let delayStrHr = args[1];
+        let delayStrDay = args[2];
+        let destination = args[3];
 
         //convert delayStr to int
-        delay = parseInt(delayStr, 10);
+        delayMin = parseInt(delayStrMin, 10);
+        delayHr = parseInt(delayStrHr, 10);
+        delayDay = parseInt(delayStrDay, 10);
 
         //send command init msg
         message
-            .reply(`Alright, I will post your message in channel ${destination} in ${delay} minute/s`)
+            .reply(`Alright, I will post your message in channel ${destination} in ${delayMin} minute/s, ${delayHr} hour/s, ${delayDay} day/s`)
             .then(msg => msg.delete({ timeout: 5000 })
             .catch(console.error));
-        delay = delay * 60000;
+            
+        delayMin = delayMin * 60000;
+        delayHr = delayHr * 3600000;
+        delayDay = delayDay * 86400000;
 
-        //remove delay int from args[0]
+        let delay = delayMin + delayHr + delayDay;
+
+        //remove delayMin int from args[0]
+        args.shift();
+
+        //remove delayHr int from args[0]
+        args.shift();
+
+        //remove delayDay int from args[0]
         args.shift();
 
         destination = args[0];
@@ -35,7 +49,6 @@ module.exports = {
         //slice destination so that it's only the channel id itself
         destination = destination.slice(2, -1);
 
-        // const channel = client.channels.cache.get(`${destination}`);
         const channel = client.channels.cache.get(destination);
         if(channel) {
             setTimeout(
@@ -44,10 +57,10 @@ module.exports = {
                 }
             , delay);
         }
-    }       
-        else {
-            message.channel.send('Insufficient Permission');
-        }
+    }
+    else {
+        message.channel.send('Insufficient Permission');
+    }
         
 }
 }
